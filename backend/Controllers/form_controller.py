@@ -7,10 +7,10 @@ Conexion_BD=ConexionAutomatUsuarioZeus()
 Conexion_Zeus = ConexionZeus()
 
 def crear_empleado_zeus_antibiotico():
-    peticion = request.get_json()
     retorno =Conexion_BD.comprobar_estado_funcionamiento()
     if not retorno:
         return jsonify(msg="No funcionando"),401
+    peticion = request.get_json()
     nombres = [peticion.get("primer_nombre"),peticion.get("segundo_nombre"),
                peticion.get("primer_apellido"),peticion.get("segundo_apellido")]
     nombre_completo = f"{nombres[0]} {nombres[1]} {nombres[2]} {nombres[3]}"
@@ -34,7 +34,7 @@ def crear_empleado_zeus_antibiotico():
                                                                contraseña_md5)
         if not retorno:
             return jsonify(msg=msj),401
-        
+        # Conexion_BD.cre
         
     except Exception as e:
         return jsonify(msg="Error-> "+e , retorno=False),400
