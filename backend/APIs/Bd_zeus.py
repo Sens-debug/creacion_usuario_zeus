@@ -14,7 +14,15 @@ class ConexionZeus:
         self.especialidades = {"ANTIBIOTICOTERAPIA":"1001",
                                "AUXILIAR ENFERMERIA":"1008",
                                "CUIDADORA":"1002",
+                               "NUTRICIONISTA":"1000",
+                               "MEDICO GENERAL":"1006",
+                               "TERAPIA GENERAL":"1011",
+                               "TERAPIA FONOAUDIOLOGICA":"1003",
+                               "TERAPIA OCUPACIONAL":"1007",
+                               
+
                                }
+        self.servicios = {}
         
     @staticmethod
     def wrapper_reconect(func):
@@ -28,13 +36,12 @@ class ConexionZeus:
                     cursor.execute("SELECT 1")
             except pymssql.Error:
                 # Reconectar si hay error
-                print("Conexión perdida. Reconectando...")
                 self.conexion = pymssql.connect(**self._config)
-                print("Reconectado exitosamente.")
-            return func(self, *args, **kwargs)
+            result =func(self, *args, **kwargs)
+            self.conexion.close()
+            return result
         return wrapped
-
-            
+           
     def fetch_SaaS(self):
         '''Retorna 2 valores [Array] y Boolean
         Busca los registros del usuario SaaS'''
@@ -63,7 +70,6 @@ class ConexionZeus:
         except:
             return ["Error en la habilitacion de Programacion"], False
         finally:
-            self.conexion.close()
             cursor.close()
 
     @wrapper_reconect
@@ -75,20 +81,16 @@ class ConexionZeus:
                 if not programacion_id:
                     return ["No se encontró programacion ID"], False
                 cursor.execute("""Exec spInsertarProgramacionMedico 
-                               @fechainicio='2025/07/11',@fechafin='2025/07/16',@horainicio='04:00',@meridianoi='am',@horafinal='11:00',@meridianof='pm',
+                               @fechainicio=%s,@fechafin=%s,@horainicio='04:00',@meridianoi='am',@horafinal='11:30',@meridianof='pm',
                                @intervalo=30,@id_programacion=720,@op='agregarProgramacion'
                                ,@id_sede=1,@nro_paciente=0,@lun=1,@mar=1,@mie=1,@jue=1,@vie=1,@sab=1,@dom=1,
-                               @txtLun='',@txtMar='',@txtMie='',@txtJue='',@txtVie='',@txtSab='',@txtDom='',@IdFestivos='',@CalcularIntervalo=0""")
+                               @txtLun='',@txtMar='',@txtMie='',@txtJue='',@txtVie='',@txtSab='',@txtDom='',@IdFestivos='',@CalcularIntervalo=0""",
+                               (fecha_inicio,fecha_fin))
                 return ["asignacion fecha exitosa"], True
         except Exception as e:
             return ["Error en la asignacion de fehca"], False
         finally:
-            self.conexion.close()
             cursor.close()
-
-    def crear_personal_asistencial_auxiliar_cuidadora(self,peticion):
-    
-        pass
 
     @wrapper_reconect
     def crear_personal_asistencial_antibiotico(self,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
@@ -118,7 +120,6 @@ class ConexionZeus:
             self.conexion.commit()
             cursor.execute("""Exec spPuntoAtencion @Op='RelacionarUsuarioPuntoAtencion',@Cedula='%s',@Xml='<item CodPuntoAtencion="1" />'""",(documento_identidad,))
             self.conexion.commit()
-        self.conexion.close()
 
     @wrapper_reconect
     def crear_usuario_antibiotico(self,nombre_completo,documento_identidad,correo,usuario,contraseña,contraseña_md5):
@@ -149,7 +150,9 @@ class ConexionZeus:
         except Exception as e:
             return [] ,False
 
-
+    def crear_personal_asistencial_auxiliar_cuidadora(self,peticion):
+    
+        pass
     def crear_personal_asistencial_auxiliar_cuidadora(self):
         pass
 
