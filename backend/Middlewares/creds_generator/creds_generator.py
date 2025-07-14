@@ -21,7 +21,8 @@ Retorna String con la password y boolean'''
         return f"{numero_documento[-4:]}{l_nombres[0][0].upper()}{l_nombres[1][0].upper()}{l_nombres[2][0].upper()}"
 
 def generate_creds(lista_nombres,numero_documento):
-    '''Retorna [Username,Password] o [ERROR]'''
+    '''Recibe una lista de nombres y un numeor de documento\n
+Retorna [Username,Password] o [ERROR]'''
     try:
         return [generate_username(lista_nombres),generate_psw(lista_nombres,numero_documento)]
     except Exception as e:
