@@ -2,6 +2,7 @@ from flask import request, jsonify
 from backend.APIs.Bd_automat_usuarios_zeus import ConexionAutomatUsuarioZeus
 from backend.APIs.Bd_zeus import ConexionZeus
 from backend.Middlewares.Hasher_md5.psw_hasher import psw_hasher
+from backend.Middlewares.creds_generator.creds_generator import generate_creds
 
 Conexion_BD=ConexionAutomatUsuarioZeus()
 Conexion_Zeus = ConexionZeus()
@@ -16,7 +17,9 @@ def crear_empleado_zeus_antibiotico():
     nombre_completo = f"{nombres[0]} {nombres[1]} {nombres[2]} {nombres[3]}"
     numero_cedula = peticion.get("cedula_ciudadania")
     contacto = [peticion.get("telefono"),peticion.get("correo")]
-    credenciales = [peticion.get("usuario"),peticion.get("contraseña")]
+    credenciales = generate_creds(nombres,numero_cedula)
+    if len(credenciales)<2:
+        return jsonify(msj=credenciales)
     contraseña_md5=psw_hasher(credenciales[1])
     try:
         msj, retorno=Conexion_Zeus.crear_personal_asistencial_antibiotico(primer_nombre=nombres[0],
@@ -34,7 +37,9 @@ def crear_empleado_zeus_antibiotico():
                                                                contraseña_md5)
         if not retorno:
             return jsonify(msg=msj),401
-        # Conexion_BD.cre
+        
+        Conexion_BD.registrar_empleado_creado(nombres[0],nombres[1],nombres[2],nombres[3],nombre_completo,
+                                              contacto[1],contacto[0],numero_cedula,)
         
     except Exception as e:
         return jsonify(msg="Error-> "+e , retorno=False),400

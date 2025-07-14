@@ -21,7 +21,7 @@ class ConexionAutomatUsuarioZeus(mysql.connector.MySQLConnection):
                 self.connect()
             resultado = funcion_envuelta(self,*args,**kwargs)
             self.disconnect()
-            return resultado, control
+            return resultado
         return envoltura
     
     @revisar_conexion
@@ -35,6 +35,32 @@ class ConexionAutomatUsuarioZeus(mysql.connector.MySQLConnection):
             elif ret[0][0]==1:
                 return True
     
-    def registrar_empleado_creado(self,primer_nombre,segundo_nombre,primer_apellido_segundo_apellido,
-                                  nombre_completo,correo,telefono,documento_identidad,especialidad):
-        pass
+    @revisar_conexion
+    def registrar_empleado_creado(self,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
+                                  nombre_completo,correo,telefono,documento_identidad,especialidad,
+                                  usuario,contraseña_md5,contraseña):
+        '''Retorna [] y Boolean '''
+        try:
+            with self.cursor() as cursor:
+                cursor.execute("""insert into personal_asistencial_creado
+                               (primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
+                               documento_identidad,correo,telefono,especialidad)
+                               Values
+                               (%s,%s,%s,%s,%s,%s,%s,%s)""",(primer_nombre,segundo_nombre,
+                                                             primer_apellido,segundo_apellido,
+                                                             documento_identidad,
+                                                             correo,telefono,
+                                                             especialidad))
+                self.commit()
+                cursor.execute("""insert into usuario_creado
+                               (nombre_completo,documento_identidad,correo,
+                               usuario,contraseña_md5,contraseña)
+                               values
+                               (%s,%s,%s,%s,%s,%s)""",(nombre_completo,documento_identidad,correo,usuario,contraseña_md5,contraseña))
+                self.commit()
+        except Exception as e:
+            cursor.close()
+            return ["ERROR AL REGISTRAT EMPLEADO EN BD "],False
+        finally:
+            cursor.close()
+            self.close()

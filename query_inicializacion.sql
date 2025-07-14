@@ -24,7 +24,7 @@ create table usuario_creado(
     nombre_completo varchar(100),
     documento_identidad varchar(20),
     correo varchar (15),
-    usuario vrachar(30),
+    usuario varchar(30),
     contraseña_md5 varchar(200),
     contraseña varchar(30)
     );

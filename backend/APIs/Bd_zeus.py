@@ -122,28 +122,32 @@ class ConexionZeus:
 
     @wrapper_reconect
     def crear_usuario_antibiotico(self,nombre_completo,documento_identidad,correo,usuario,contraseña,contraseña_md5):
-        with self.conexion.cursor() as cursor:
-            cursor.execute("SELECT TOP 1 COUNT(*) FROM usuario WHERE usuario = %s OR cedula = %s",(usuario,documento_identidad))
-            if cursor.fetchall:
-                return ["Usuario ya existente"],False
-            cursor.execute("""INSERT INTO usuario 
-				            (usuario, cedula, nombre,
-                            nivel, status,
-                            email, codigo,
-                            fecha, nivel_externo, bodega, inf_pedido,autoriza,
-                           pass,
-                           Solicitante,cierra_sesion_users, AnulaRecibos,anulaRHC,intercalarHC,LQ_DctosNoRestriccion,GeneraReciboCaja, ModificaMovContableFacts,AuditaFE,IdComputadorAsignado,SerialComputador,FirmaBase64)
-				VALUES
-				            (%s, %s, %s,
-                            22, 1,
-                            %s, %s,
-                            GETDATE(), '1', '', 0,0,
-                            %s,
-                            0,0, 0,0,0,0,0, 0,0,'','','')""",(
-                                usuario,documento_identidad,nombre_completo,
-                                correo,contraseña_md5,
-                                contraseña
-                            ))
+        try:
+            with self.conexion.cursor() as cursor:
+                cursor.execute("SELECT TOP 1 COUNT(*) FROM usuario WHERE usuario = %s OR cedula = %s",(usuario,documento_identidad))
+                if cursor.fetchall:
+                    return ["Usuario ya existente"],False
+                cursor.execute("""INSERT INTO usuario 
+		    		            (usuario, cedula, nombre,
+                                nivel, status,
+                                email, codigo,
+                                fecha, nivel_externo, bodega, inf_pedido,autoriza,
+                               pass,
+                               Solicitante,cierra_sesion_users, AnulaRecibos,anulaRHC,intercalarHC,LQ_DctosNoRestriccion,GeneraReciboCaja, ModificaMovContableFacts,AuditaFE,IdComputadorAsignado,SerialComputador,FirmaBase64)
+		    		VALUES
+		    		            (%s, %s, %s,
+                                22, 1,
+                                %s, %s,
+                                GETDATE(), '1', '', 0,0,
+                                %s,
+                                0,0, 0,0,0,0,0, 0,0,'','','')""",(
+                                    usuario,documento_identidad,nombre_completo,
+                                    correo,contraseña_md5,
+                                    contraseña
+                                ))
+                return [],True
+        except Exception as e:
+            return [] ,False
 
 
     def crear_personal_asistencial_auxiliar_cuidadora(self):
