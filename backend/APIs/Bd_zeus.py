@@ -19,10 +19,11 @@ class ConexionZeus:
                                "TERAPIA GENERAL":"1011",
                                "TERAPIA FONOAUDIOLOGICA":"1003",
                                "TERAPIA OCUPACIONAL":"1007",
-                               
-
                                }
-        self.servicios = {}
+        self.servicios = {"ANTIBIOTICOTERAPIA":"10",
+                          "PERMANENTES":"4"}
+        self.niveles_acceso={"ANTIBIOTICOTERAPIA":"30",
+                             "PERMANENTES":"29"}
         
     @staticmethod
     def wrapper_reconect(func):
@@ -122,6 +123,7 @@ class ConexionZeus:
         except Exception as e:
             return [f"Error en el punto de atencion -> {e}"],False
 
+#----------------------------------------------------------------------
     @wrapper_reconect
     def crear_personal_asistencial_antibiotico(self,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
                                                nombre_completo,telefono,correo,documento_identidad):
@@ -154,7 +156,6 @@ class ConexionZeus:
             return ["Perosnal asistencial creado exitosamente"], True 
         except Exception as e:
             return [f"error creandopersonal asistencial --> {e}"],False
-
     @wrapper_reconect
     def crear_usuario_antibiotico(self,nombre_completo,documento_identidad,correo,usuario,contraseña,contraseña_md5):
         print("crear usuario")
@@ -186,11 +187,125 @@ class ConexionZeus:
             return ["Creacion usuario exitosa"],True
         except Exception as e:
             return [f"Creacion Usuario Fallida --> {e}"] ,False
-
-    def crear_personal_asistencial_auxiliar_cuidadora(self,peticion):
-    
-        pass
-    def crear_personal_asistencial_auxiliar_cuidadora(self):
-        pass
-
-    
+#---------------------------------------------------------------------
+    @wrapper_reconect
+    def crear_personal_asistencial_cuidadora(self,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
+                                               nombre_completo,telefono,correo,documento_identidad):
+        try:
+            print("crear asistencial")
+            especialidad =self.especialidades["CUIDADORA"]
+            with self.conexion.cursor() as cursor:
+                cursor.execute("SELECT * FROM sis_medi WHERE cedula = %s",(documento_identidad,))
+                if cursor.fetchall():
+                    return ["Personal asistencial con cedula ya existente"], False
+                cursor.execute("""INSERT INTO sis_medi
+		    		            (cedula, nombre,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido,especialidad,
+                                registro, tipo, tiempo, es_usuario, es_medico,es_anes, es_ayu, es_pediatra, valoresperado,max_no_qx,max_qx,max_diagnostico,max_laboratorios,max_imagenologia,max_formulas, pacientes,
+                                servicio,cierra_historia,abre_historia,es_auditor,es_especialista,Tercero, ApartaCita, direccion,citaExterna,
+                                telefono,email,
+                                leyendaConfirmarMedico,RequiereAuditoria,EsMedicoFamiliar,EsOdontologo,EsPyp,EsPrioritario,NivelMctos,estado,pago_prod,CodHistoriaPredeterminada,MaxFormulasPosfechadas,Tipo_id, 
+                                MedicoVisitador,Habilita_Tercero,OcultaragendaMedica)
+		    		VALUES
+		    		    (%s, %s,%s,%s,%s,%s,%s,
+                         '', '4', '0', 0, 1,0, 0, 0, 0,0,0,0,0,0,0, 0,
+                        4,0,0,0,0,'',0,'','1',
+                        %s,%s,
+                        '0','0','0','0','0','0','0','1','0','', 3,'CC', NULL,0,0)""",
+                        (documento_identidad,nombre_completo,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,especialidad,
+                         telefono,correo)
+                         )
+                self.conexion.commit()
+            return ["Perosnal asistencial creado exitosamente"], True 
+        except Exception as e:
+            return [f"error creando personal asistencial --> {e}"],False
+    @wrapper_reconect
+    def crear_usuario_cuidadora(self,nombre_completo,documento_identidad,correo,usuario,contraseña,contraseña_md5):
+        try:
+            with self.conexion.cursor() as cursor:
+                cursor.execute("SELECT * FROM usuario WHERE cedula = %s",(documento_identidad,))
+                if cursor.fetchall():
+                    return ["Usuario ya existente"],False
+                cursor.execute("""INSERT INTO usuario 
+		    		            (usuario,cedula,nombre,
+                                nivel,status,
+                                email,codigo,
+                                fecha,nivel_externo,bodega,inf_pedido,autoriza,
+                               pass,
+                               Solicitante,cierra_sesion_users, AnulaRecibos,anulaRHC,intercalarHC,LQ_DctosNoRestriccion,GeneraReciboCaja,
+                                ModificaMovContableFacts,AuditaFE,IdComputadorAsignado,SerialComputador,FirmaBase64)
+		    		VALUES
+		    		            (%s, %s, %s,
+                                29, 1,
+                                %s, %s,
+                                GETDATE(), '1', '', 0,0,
+                                %s,
+                                0,0, 0,0,0,0,0, 0,0,'','','')""",(
+                                    usuario,documento_identidad,nombre_completo,
+                                    correo,contraseña_md5,
+                                    contraseña
+                                ))
+                self.conexion.commit()
+            return ["Creacion usuario exitosa"],True
+        except Exception as e:
+            return [f"Creacion Usuario Fallida --> {e}"] ,False
+#---------------------------------------------------------------------
+    @wrapper_reconect
+    def crear_personal_asistencial_auxiliar(self,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,
+                                               nombre_completo,telefono,correo,documento_identidad):
+        try:
+            print("crear asistencial")
+            especialidad =self.especialidades["AUXILIAR ENFERMERIA"]
+            with self.conexion.cursor() as cursor:
+                cursor.execute("SELECT * FROM sis_medi WHERE cedula = %s",(documento_identidad,))
+                if cursor.fetchall():
+                    return ["Personal asistencial con cedula ya existente"], False
+                cursor.execute("""INSERT INTO sis_medi
+		    		            (cedula, nombre,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido,especialidad,
+                                registro, tipo, tiempo, es_usuario, es_medico,es_anes, es_ayu, es_pediatra, valoresperado,max_no_qx,max_qx,max_diagnostico,max_laboratorios,max_imagenologia,max_formulas, pacientes,
+                                servicio,cierra_historia,abre_historia,es_auditor,es_especialista,Tercero, ApartaCita, direccion,citaExterna,
+                                telefono,email,
+                                leyendaConfirmarMedico,RequiereAuditoria,EsMedicoFamiliar,EsOdontologo,EsPyp,EsPrioritario,NivelMctos,estado,pago_prod,CodHistoriaPredeterminada,MaxFormulasPosfechadas,Tipo_id, 
+                                MedicoVisitador,Habilita_Tercero,OcultaragendaMedica)
+		    		VALUES
+		    		    (%s, %s,%s,%s,%s,%s,%s,
+                         '', '4', '0', 0, 1,0, 0, 0, 0,0,0,0,0,0,0, 0,
+                        4,0,0,0,0,'',0,'','1',
+                        %s,%s,
+                        '0','0','0','0','0','0','0','1','0','', 3,'CC', NULL,0,0)""",
+                        (documento_identidad,nombre_completo,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,especialidad,
+                         telefono,correo)
+                         )
+                self.conexion.commit()
+            return ["Perosnal asistencial creado exitosamente"], True 
+        except Exception as e:
+            return [f"error creando personal asistencial --> {e}"],False
+    @wrapper_reconect
+    def crear_usuario_auxiliar(self,nombre_completo,documento_identidad,correo,usuario,contraseña,contraseña_md5):
+        try:
+            with self.conexion.cursor() as cursor:
+                cursor.execute("SELECT * FROM usuario WHERE cedula = %s",(documento_identidad,))
+                if cursor.fetchall():
+                    return ["Usuario ya existente"],False
+                cursor.execute("""INSERT INTO usuario 
+		    		            (usuario,cedula,nombre,
+                                nivel,status,
+                                email,codigo,
+                                fecha,nivel_externo,bodega,inf_pedido,autoriza,
+                               pass,
+                               Solicitante,cierra_sesion_users, AnulaRecibos,anulaRHC,intercalarHC,LQ_DctosNoRestriccion,GeneraReciboCaja,
+                                ModificaMovContableFacts,AuditaFE,IdComputadorAsignado,SerialComputador,FirmaBase64)
+		    		VALUES
+		    		            (%s, %s, %s,
+                                29, 1,
+                                %s, %s,
+                                GETDATE(), '1', '', 0,0,
+                                %s,
+                                0,0, 0,0,0,0,0, 0,0,'','','')""",(
+                                    usuario,documento_identidad,nombre_completo,
+                                    correo,contraseña_md5,
+                                    contraseña
+                                ))
+                self.conexion.commit()
+            return ["Creacion usuario exitosa"],True
+        except Exception as e:
+            return [f"Creacion Usuario Fallida --> {e}"] ,False 
