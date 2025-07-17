@@ -1,7 +1,7 @@
 from flask import Blueprint
-from backend.Controllers.auth_controller import login
+from backend.Controllers.form_controller import crear_empleado_zeus_antibiotico
 
-auth_bp = Blueprint('form',__name__)
+form_bp = Blueprint('form',__name__)
 
 #Ruta login
-auth_bp.route('/crear_usuario', methods=['POST'])(login)
+form_bp.route('/crear_usuario', methods=['POST'])(crear_empleado_zeus_antibiotico)

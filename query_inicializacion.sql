@@ -1,14 +1,12 @@
 drop database if exists automat_usuarios_zeus;
-go;
 create database  automat_usuarios_zeus;
-go;
 use automat_usuarios_zeus;
-go;
+
 
 create table control_funcion(funcionando bit);
 
 create table personal_asistencial_creado(
-    id int autoincrement primary key,
+    id int AUTO_INCREMENT primary key,
     primer_nombre varchar (30),
     segundo_nombre varchar (30),
     primer_apellido varchar(30),
@@ -20,7 +18,7 @@ create table personal_asistencial_creado(
     );
 
 create table usuario_creado(
-    id int autoincrement primary key,
+    id int AUTO_INCREMENT primary key,
     nombre_completo varchar(100),
     documento_identidad varchar(20),
     correo varchar (15),

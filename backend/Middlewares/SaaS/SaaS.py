@@ -2,7 +2,7 @@ from backend.APIs.Bd_zeus import ConexionZeus
 from random import randint
 from time import sleep
 
-conexion_zeus = ConexionZeus('192.168.100.50','sa','sh@k@1124','Salud')
+conexion_zeus = ConexionZeus()
 
 def saas():
     '''Retorna Boolean o None'''
@@ -17,3 +17,5 @@ def saas():
     except Exception as e:
         print(e)
         return None
+    finally:
+        conexion_zeus.conexion.close()

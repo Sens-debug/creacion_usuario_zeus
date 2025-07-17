@@ -21,6 +21,7 @@ class ConexionAutomatUsuarioZeus(mysql.connector.MySQLConnection):
                 self.connect()
             resultado = funcion_envuelta(self,*args,**kwargs)
             self.disconnect()
+            
             return resultado
         return envoltura
     
