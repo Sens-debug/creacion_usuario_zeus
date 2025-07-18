@@ -10,8 +10,6 @@ Retorna String con el username, y boolean'''
         r =f"{l_nombres[0][0].upper()}{l_nombres[1][0].upper()}{l_nombres[2].upper()}{l_nombres[3][0].upper()}"
         return r.replace(" ","")
         
-
-
 def generate_psw(l_nombres,numero_documento):
     '''Recibe lista de nombres ordenada y un numero de documento\n
 [p_n, s_n, p_a, s_a]\n

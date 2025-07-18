@@ -1,4 +1,4 @@
-from backend.APIs.Bd_zeus import ConexionZeus
+from backend.APIs.Zeus.Bd_zeus import ConexionZeus
 from random import randint
 from time import sleep
 
