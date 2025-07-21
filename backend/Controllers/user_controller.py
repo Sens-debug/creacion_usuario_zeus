@@ -59,7 +59,7 @@ def crear_empleado_zeus():
         print(msj)
         if not all([retorno_habilitar_agenda and retorno_punto_atencion and retorno_habilitar_programacion]):
             return jsonify(msg= "Error en Agenda y/o PuntoAtencion"),418
-        msj, retorno= enviar_credenciales_gmail(contacto[1],credenciales[0],credenciales[1],cargo)
+        msj, retorno= enviar_credenciales_gmail(contacto[1],credenciales[0],credenciales[1],cargo,nombre_completo)
         if not retorno:
             return jsonify(msg=msj),400
         Conexion_BD.registrar_empleado_creado(nombres[0],nombres[1],nombres[2],nombres[3],nombre_completo,

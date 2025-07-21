@@ -1,128 +1,49 @@
 import smtplib
 from email.message import EmailMessage
-
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 def enviar_credenciales_gmail(correo_destinatario,usuario_zeus,contraseña_zeus,cargo,nombre_completo):
     '''Retorna [Mensaje] y Boolean'''
     try:
         json_mensjaes = {
-"ANTIBIOTICOTERAPIA":F""" !!!  IPSTID, SOMOS TÚ, SOMOS TODOS.
-BIENVENID@ A NUESTRA GRAN FAMILIA  !!!
-                         
-
-🤖 Hola {nombre_completo}, te entrego tu:
-
-Usuario Plataforma Zeus Salud --> {usuario_zeus}
-Contraseña Plataforma Zeus Salud --> {contraseña_zeus}
-Acceso a la plataforma Zeus Salud --> http://bit.ly/eZeusSalud
-
-ESPERAMOS QUE TENGAS UNA GRAN AVENTURA EN TU CARGO COMO --> {cargo}
-
-Proceso Confirmacion Citas
-
-https://drive.google.com/file/d/1OeulemhO4pzJ5Kxk3yZ5_hsnLSaYA0t1/view?usp=drive_link
-
-Cargue Notas Antibioticos 
-
-https://drive.google.com/file/d/1OtQ4AMvg5yZB-svmrATrKcHf1MVxMLDx/view?usp=drive_link""",
-
-
-"AUXILIAR ENFERMERIA":F""" !!!  IPSTID, SOMOS TÚ, SOMOS TODOS.
-BIENVENID@ A NUESTRA GRAN FAMILIA  !!!
-
-🤖 Hola, {nombre_completo} te entrego tu:
-
-Usuario Plataforma Zeus Salud --> {usuario_zeus}
-Contraseña Plataforma Zeus Salud --> {contraseña_zeus}
-Acceso a la plataforma Zeus Salud --> http://bit.ly/eZeusSalud
-
-ESPERAMOS QUE TENGAS UNA GRAN AVENTURA EN TU CARGO COMO --> {cargo}
-
-Guia Cargue Notas ZeusSalud
-
-https://drive.google.com/file/d/1Ot-jfrO6u8U0gJUDNjSRWFMlnxoEvkt5/view?usp=drive_link"""
-,
-
-"MEDICINA GENERAL":f"""
- !!!  IPSTID, SOMOS TÚ, SOMOS TODOS.
-BIENVENID@ A NUESTRA GRAN FAMILIA  !!!
-
-🤖 Hola, {nombre_completo} te entrego tu:
-
-Usuario Plataforma Zeus Salud --> {usuario_zeus}
-Contraseña Plataforma Zeus Salud --> {contraseña_zeus}
-Acceso a la plataforma Zeus Salud --> http://bit.ly/eZeusSalud
-
-ESPERAMOS QUE TENGAS UNA GRAN AVENTURA EN TU CARGO COMO --> {cargo}
-
-Proceso confirmacion cita 
-https://drive.google.com/file/d/1OeulemhO4pzJ5Kxk3yZ5_hsnLSaYA0t1/view?usp=drive_link
-
------------------------------
-Guia Historia Clinica Medicos
-
-https://drive.google.com/file/d/1Os08deIEg_JEkn-CmJmddYfe1Rh-qDRm/view?usp=drive_link"""
-,
-
-"MEDICINA GENERAL MEDIO TIEMPO":F"""!!!  IPSTID, SOMOS TÚ, SOMOS TODOS.
-BIENVENID@ A NUESTRA GRAN FAMILIA  !!!
-
-🤖 Hola, {nombre_completo} te entrego tu:
-
-Usuario Plataforma Zeus Salud --> {usuario_zeus}
-Contraseña Plataforma Zeus Salud --> {contraseña_zeus}
-Acceso a la plataforma Zeus Salud --> http://bit.ly/eZeusSalud
-
-ESPERAMOS QUE TENGAS UNA GRAN AVENTURA EN TU CARGO COMO --> {cargo}
-
-Proceso confirmacion cita 
-https://drive.google.com/file/d/1OeulemhO4pzJ5Kxk3yZ5_hsnLSaYA0t1/view?usp=drive_link
------------------------------
-Guia Historia Clinica Medicos
-
-https://drive.google.com/file/d/1Os08deIEg_JEkn-CmJmddYfe1Rh-qDRm/view?usp=drive_link""",
-
-"TERAPIA FISICA":f"""
-!!!  IPSTID, SOMOS TÚ, SOMOS TODOS.
-BIENVENID@ A NUESTRA GRAN FAMILIA  !!!
-
-🤖 Hola, {nombre_completo} te entrego tu:
-
-Usuario Plataforma Zeus Salud --> {usuario_zeus}
-Contraseña Plataforma Zeus Salud --> {contraseña_zeus}
-Acceso a la plataforma Zeus Salud --> http://bit.ly/eZeusSalud
-
-ESPERAMOS QUE TENGAS UNA GRAN AVENTURA EN TU CARGO COMO --> {cargo}
-
-Proceso confirmacion Citas 
-
-https://drive.google.com/file/d/1OeulemhO4pzJ5Kxk3yZ5_hsnLSaYA0t1/view?usp=drive_link
-
----------------------------------------
-
-Guia Notas [Nutricion-Terapia-Psicologia]
-
-https://drive.google.com/file/d/1OxluWzrRBGWMH0edA5s6YJE9GWfXSEwf/view?usp=drive_link"""
-
+"ANTIBIOTICOTERAPIA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\antibiotic_template.html",
+"AUXILIAR ENFERMERIA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\nurse_template.html",
+"CUIDADOR":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\nurse_template.html",
+"MEDICINA GENERAL":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\doctor_template.html",
+"MEDICINA GENERAL MEDIO TIEMPO":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\doctor_template.html",
+"TERAPIA FISICA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"TERAPIA OCUPACIONAL":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"TERAPIA FONOAUDIOLOGICA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"TERAPIA GENERAL":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"TERAPIA RESPIRATORIA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"PSICOLOGIA":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
+"NUTRICION":"C:\\Users\\Sistemas\\Desktop\\Repositorios IPSTID\\creacion_usuario_zeus\\backend\\Middlewares\\Mail_Sender\\msg_templates\\pro_employe_template.html",
 }
         remitente = "cuentaszeusipstid@gmail.com"
         destinatario= correo_destinatario
         contraseña = "wjvm wzsk tcft kzpq"
         asunto= "CREDENCIALES ACCESO ZEUS"
+
+        with open (json_mensjaes[cargo],'r',encoding='utf-8') as file:
+            cuerpo_html=file.read().format(cargo=cargo,usuario_zeus=usuario_zeus,contraseña_zeus=contraseña_zeus,nombre_completo=nombre_completo)
+
         cuerpo = json_mensjaes[cargo]
-        mensaje = EmailMessage()
+        mensaje = MIMEMultipart('alternative')
         mensaje["From"]=remitente
         mensaje["To"]=destinatario
         mensaje["subject"]=asunto
-        mensaje.set_content(cuerpo)
+        parte_html= MIMEText(cuerpo_html,'html')
+        mensaje.attach(parte_html)
 
         with smtplib.SMTP_SSL("smtp.gmail.com") as smtp:
             smtp.login(remitente,contraseña)
-            smtp.send_message(mensaje)
+            smtp.sendmail(remitente,destinatario,mensaje.as_string())
+            print("enviado")
         return ["Correo enviado exitosamente"],True
     except Exception as e:
+        print("error")
+        print(e)
         return [f"Error enviando el correo---> {e}"], False
     
-
-
