@@ -12,7 +12,7 @@ create table personal_asistencial_creado(
     primer_apellido varchar(30),
     segundo_apellido varchar (30),
     documento_identidad varchar(20),
-    correo varchar (15),
+    correo varchar (70),
     telefono varchar (20),
     especialidad varchar(40)
     );
@@ -21,8 +21,10 @@ create table usuario_creado(
     id int AUTO_INCREMENT primary key,
     nombre_completo varchar(100),
     documento_identidad varchar(20),
-    correo varchar (15),
+    correo varchar (70),
     usuario varchar(30),
     contraseña_md5 varchar(200),
     contraseña varchar(30)
     );
+
+INSERT INTO control_funcion(funcionando) values (1);

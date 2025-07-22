@@ -185,8 +185,8 @@ class ConexionZeus:
                 cursor.execute("Exec spProgramaciones @Op='Guardar',@Nombre=%s,@Activo='1'",(nombre_completo,))
                 self.conexion.commit()
                 return ["Habilitacion en programacion Exitosa"], True
-        except:
-            return ["Error en la habilitacion de Programacion"], False
+        except Exception as e:
+            return [f"Error en la habilitacion de Programacion--> {e}"], False
         finally:
             cursor.close()
     @wrapper_reconect

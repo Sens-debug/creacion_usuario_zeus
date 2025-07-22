@@ -51,10 +51,11 @@ def crear_empleado_zeus():
         if not all([retorno_usuario,retorno_asistenacial]):
             return jsonify(mjg="Error en las Creacion y Habilitacin Usuario"),418
         Conexion_Zeus.set_beg_tran()
-        msj,retorno_habilitar_programacion = Conexion_Zeus.habilitar_programacion(nombre_completo)
-        print(msj)
-        msj, retorno_habilitar_agenda = Conexion_Zeus.habilitar_agenda(nombre_completo,lista_fechas[0],lista_fechas[1],cargo)
-        print(msj)
+        if cargo !="AUXILIAR ENFERMERIA" or cargo!="CUIDADOR":
+            msj,retorno_habilitar_programacion = Conexion_Zeus.habilitar_programacion(nombre_completo)
+            print(msj)
+            msj, retorno_habilitar_agenda = Conexion_Zeus.habilitar_agenda(nombre_completo,lista_fechas[0],lista_fechas[1],cargo)
+            print(msj)
         msj, retorno_punto_atencion = Conexion_Zeus.asignar_punto_atencion(numero_cedula)
         print(msj)
         if not all([retorno_habilitar_agenda and retorno_punto_atencion and retorno_habilitar_programacion]):
